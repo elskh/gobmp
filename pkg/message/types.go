@@ -76,7 +76,7 @@ type UnicastPrefix struct {
 	Prefix         string              `json:"prefix,omitempty"`
 	PrefixLen      int32               `json:"prefix_len,omitempty"`
 	IsIPv4         bool                `json:"is_ipv4"`
-	OriginAS       int32               `json:"origin_as,omitempty"`
+	OriginAS       uint32              `json:"origin_as,omitempty"`
 	Nexthop        string              `json:"nexthop,omitempty"`
 	IsNexthopIPv4  bool                `json:"is_nexthop_ipv4"`
 	PathID         int32               `json:"path_id,omitempty"`
