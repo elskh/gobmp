@@ -36,6 +36,7 @@ func (p *producer) producePeerMessage(op int, msg bmp.Message) {
 			LocalPort:      int(peerUpMsg.LocalPort),
 			AdvHolddown:    int(peerUpMsg.SentOpen.HoldTime),
 			RemoteHolddown: int(peerUpMsg.ReceivedOpen.HoldTime),
+			Hash:           msg.PeerHeader.GetPeerHash(),
 		}
 		if f, err := msg.PeerHeader.IsAdjRIBInPost(); err == nil {
 			m.IsAdjRIBInPost = f
@@ -97,6 +98,7 @@ func (p *producer) producePeerMessage(op int, msg bmp.Message) {
 			RemoteASN:  msg.PeerHeader.PeerAS,
 			PeerRD:     msg.PeerHeader.GetPeerDistinguisherString(),
 			Timestamp:  msg.PeerHeader.GetPeerTimestamp(),
+			Hash:       msg.PeerHeader.GetPeerHash(),
 		}
 		m.RemoteIP = msg.PeerHeader.GetPeerAddrString()
 		m.RemoteBGPID = msg.PeerHeader.GetPeerBGPIDString()
