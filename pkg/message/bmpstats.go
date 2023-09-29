@@ -26,17 +26,22 @@ func (p *producer) produceStatsMessage(msg bmp.Message) {
 	}
 
 	m := Stats{
-		RemoteASN:  msg.PeerHeader.PeerAS,
-		PeerRD:     msg.PeerHeader.GetPeerDistinguisherString(),
-		Timestamp:  msg.PeerHeader.GetPeerTimestamp(),
-		RouterHash: p.speakerHash,
-		RouterIP:   p.speakerIP,
-		PeerType:   uint8(msg.PeerHeader.PeerType),
+		RemoteASN:                   msg.PeerHeader.PeerAS,
+		PeerRD:                      msg.PeerHeader.GetPeerDistinguisherString(),
+		Timestamp:                   msg.PeerHeader.GetPeerTimestamp(),
+		RouterHash:                  p.speakerHash,
+		RouterIP:                    p.speakerIP,
+		PeerType:                    uint8(msg.PeerHeader.PeerType),
+		AdjRIBsInAfiSafi:            make(map[string]uint64),
+		LocalRibAfiSafi:             make(map[string]uint64),
+		AdjRIBsOutPostPolicyAfiSafi: make(map[string]uint64),
 	}
 	m.RemoteIP = msg.PeerHeader.GetPeerAddrString()
 	m.RemoteBGPID = msg.PeerHeader.GetPeerBGPIDString()
 	for _, tlv := range StatsMsg.StatsTLV {
 		switch tlv.InformationType {
+		case 0:
+			m.RejectedPrefixes = binary.BigEndian.Uint32(tlv.Information)
 		case 1:
 			m.DuplicatePrefixs = binary.BigEndian.Uint32(tlv.Information)
 		case 2:
@@ -53,14 +58,24 @@ func (p *producer) produceStatsMessage(msg bmp.Message) {
 			m.AdjRIBsIn = binary.BigEndian.Uint64(tlv.Information)
 		case 8:
 			m.LocalRib = binary.BigEndian.Uint64(tlv.Information)
+		case 9:
+			m.AdjRIBsInAfiSafi[tlv.AfiSafi] = binary.BigEndian.Uint64(tlv.Information)
+		case 10:
+			m.LocalRibAfiSafi[tlv.AfiSafi] = binary.BigEndian.Uint64(tlv.Information)
 		case 11:
 			m.UpdatesAsWithdraw = binary.BigEndian.Uint32(tlv.Information)
 		case 12:
 			m.PrefixesAsWithdraw = binary.BigEndian.Uint32(tlv.Information)
+		case 15:
+			m.AdjRIBsOutPostPolicy = binary.BigEndian.Uint64(tlv.Information)
+		case 17:
+			m.AdjRIBsOutPostPolicyAfiSafi[tlv.AfiSafi] = binary.BigEndian.Uint64(tlv.Information)
 		default:
 			glog.Warningf("unprocessed stats type:%v", tlv.InformationType)
 		}
 	}
+	//sm, _ := json.Marshal(&StatsMsg)
+	//glog.Infof("STATUS MESSAGE: %s", sm)
 	if err := p.marshalAndPublish(&m, bmp.StatsReportMsg, []byte(m.RouterHash), false); err != nil {
 		glog.Errorf("failed to process peer Stats Report message with error: %+v", err)
 		return

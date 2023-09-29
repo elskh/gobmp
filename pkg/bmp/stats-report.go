@@ -11,7 +11,8 @@ import (
 // StatsReport defines BMP Stats message structure
 type StatsReport struct {
 	StatsCount int32
-	StatsTLV   []InformationalTLV
+	//StatsTLV   []InformationalTLV
+	StatsTLV []InformationalTLVAfiSafi
 }
 
 // UnmarshalBMPStatsReportMessage builds BMP Stats Reports object
@@ -27,7 +28,8 @@ func UnmarshalBMPStatsReportMessage(b []byte) (*StatsReport, error) {
 	}
 	sr.StatsCount = l
 	p += 4
-	tlvs, err := UnmarshalTLV(b[p:])
+	//tlvs, err := UnmarshalTLV(b[p:])
+	tlvs, err := UnmarshalTLVAfiSafi(b[p:])
 	if err != nil {
 		return nil, err
 	}

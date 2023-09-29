@@ -1,6 +1,8 @@
 package parser
 
 import (
+	"encoding/json"
+
 	"github.com/golang/glog"
 	"github.com/sbezverk/gobmp/pkg/bmp"
 	"github.com/sbezverk/tools"
@@ -84,12 +86,18 @@ func parsingWorker(b []byte, producerQueue chan bmp.Message) {
 				glog.Errorf("fail to recover BMP Peer Up message with error: %+v", err)
 				return
 			}
+			b, _ := json.Marshal(bmpMsg)
+			glog.Infof("PEER UP MESSAGE: %s", b)
 			p += perPerHeaderLen
 		case bmp.InitiationMsg:
-			if _, err := bmp.UnmarshalInitiationMessage(b[p : p+(int(ch.MessageLength)-bmp.CommonHeaderLength)]); err != nil {
+			var bmpInitMsg *bmp.InitiationMessage
+			//if _, err := bmp.UnmarshalInitiationMessage(b[p : p+(int(ch.MessageLength)-bmp.CommonHeaderLength)]); err != nil {
+			if bmpInitMsg, err = bmp.UnmarshalInitiationMessage(b[p : p+(int(ch.MessageLength)-bmp.CommonHeaderLength)]); err != nil {
 				glog.Errorf("fail to recover BMP Initiation message with error: %+v", err)
 				return
 			}
+			b, _ := json.Marshal(&bmpInitMsg)
+			glog.Infof("INITIATION MESSAGE: %s", b)
 		case bmp.TerminationMsg:
 			glog.V(5).Infof("Termination message")
 			if glog.V(6) {
