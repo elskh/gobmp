@@ -86,8 +86,8 @@ func parsingWorker(b []byte, producerQueue chan bmp.Message) {
 				glog.Errorf("fail to recover BMP Peer Up message with error: %+v", err)
 				return
 			}
-			b, _ := json.Marshal(bmpMsg)
-			glog.Infof("PEER UP MESSAGE: %s", b)
+			//b, _ := json.Marshal(bmpMsg)
+			//glog.Infof("PEER UP MESSAGE: %s", b)
 			p += perPerHeaderLen
 		case bmp.InitiationMsg:
 			var bmpInitMsg *bmp.InitiationMessage

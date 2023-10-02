@@ -535,13 +535,13 @@ type Stats struct {
 	InvalidatedDueAspath        uint32            `json:"invalidated_due_aspath,omitempty"`
 	InvalidatedDueOriginatorId  uint32            `json:"invalidated_due_originator_id,omitempty"`
 	InvalidatedAsConfed         uint32            `json:"invalidated_due_asconfed,omitempty"`
-	AdjRIBsIn                   uint64            `json:"ads_rib_in,omitempty"`
-	AdjRIBsInAfiSafi            map[string]uint64 `json:"ads_rib_in_afisafi,omitempty"`
-	LocalRib                    uint64            `json:"local_rib,omitempty"`
-	LocalRibAfiSafi             map[string]uint64 `json:"local_rib_afisafi,omitempty"`
-	RejectedPrefixes            uint32            `json:"rejected_prefix,omitempty"`
-	AdjRIBsOutPostPolicy        uint64            `json:"ads_rib_out,omitempty"`
-	AdjRIBsOutPostPolicyAfiSafi map[string]uint64 `json:"ads_rib_out_afisafi,omitempty"`
+	AdjRIBsIn                   uint64            `json:"ads_rib_in"`
+	AdjRIBsInAfiSafi            map[string]uint64 `json:"ads_rib_in_afisafi"`
+	LocalRib                    uint64            `json:"local_rib"`
+	LocalRibAfiSafi             map[string]uint64 `json:"local_rib_afisafi"`
+	AdjRIBsOutPostPolicy        uint64            `json:"ads_rib_out"`
+	AdjRIBsOutPostPolicyAfiSafi map[string]uint64 `json:"ads_rib_out_afisafi"`
+	RejectedPrefixes            uint32            `json:"rejected_prefix"`
 	UpdatesAsWithdraw           uint32            `json:"updates_as_withdraw,omitempty"`
 	PrefixesAsWithdraw          uint32            `json:"prefixes_as_withdraw,omitempty"`
 }
