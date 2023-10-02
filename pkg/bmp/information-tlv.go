@@ -55,10 +55,12 @@ var AfiSafiValue = map[uint32]string{
 	100002: "ipv4_multicast",
 	100004: "ipv4_label",
 	100128: "ipv4_vpn",
+	100133: "ipv4_flowspec",
 	200001: "ipv6_unicast",
 	200002: "ipv6_multicast",
 	200004: "ipv6_label",
 	200128: "ipv6_vpn",
+	200133: "ipv6_flowspec",
 }
 
 func UnmarshalTLVAfiSafi(b []byte) ([]InformationalTLVAfiSafi, error) {
